@@ -75,25 +75,25 @@ Advanced queries help you search more precisely by using certain special charact
 
 ### Search for one or more words
 
-You can search for one word or several words.
-
-Example:
-
-- `open science`
-
-This type of search looks for the words you enter.
-
-If you want to require both words, use either `+` or `AND`.
-
-Examples:
-
-- `+open +science`
-- `open AND science`
+You can search for one word or several words. Several words find records that contain all of them: `open science` is the same search as `open AND science`.
 
 <figure markdown>
-![Search results for a query using AND](images/and-search-results.png)
-  <figcaption>Example result for `illuminating AND light`.</figcaption>
+![Search results for several words](images/default-search-results.png)
+  <figcaption>Example result for `illuminating light`.</figcaption>
 </figure>
+
+This type of search looks for the words you enter in the main parts of a record: title, creators and contributors, description, subjects, identifiers and DOI, resource type, communities, and CERN fields such as experiment, accelerator or department. You don't need to know which field a word is in. The words can come from different parts of the record. For example, `thesis Mobius` finds theses with Mobius as an author, and `CERN Education` finds records of a community with that name.
+
+You can also paste a DOI or a report number as it is, for example `10.17181/CERN.ABCD.1234` or `CERN-THESIS-2021-078`.
+
+To find records that contain any of the words, use `OR`, for example `illuminating OR light`. In `open science OR data`, the record must contain `open`, together with either `science` or `data`.
+
+<figure markdown>
+![Search results for a query using OR](images/or-search-results.png)
+  <figcaption>Example result for `illuminating OR light`.</figcaption>
+</figure>
+
+You can also put `+` before a word to require it, for example `+open +science`.
 
 If you want to exclude a word, use either `-` or `NOT`.
 
@@ -136,13 +136,35 @@ Examples:
 | `description:policy` | searches in the description |
 | `language:en` | searches for records in English |
 | `publication_date:2024-01-01` | searches for a specific publication date |
-| `doi:"10.17181/example-doi"` | searches for a [DOI](../glossary.md#doi) |
+| `contributor:Smith` | searches for a contributor name |
+| `affiliation:CERN` | searches for a creator affiliation |
+| `subject:"particle physics"` | searches in the subjects |
+| `type:thesis` | searches for a [resource type](../glossary.md#resource-type) by name |
+| `resource_type.id:publication-dissertation` | searches for a resource type by its identifier |
+| `community:"CERN Research"` | searches for records in a community, by community name |
+| `community.id:cern-research` | searches for records in a community, by the community identifier shown in its address |
+| `doi:10.17181/example-doi` | searches for a [DOI](../glossary.md#doi) |
 | `cds:12345` | searches for a CDS identifier |
-| `cdsrn:CERN-THESIS-2021-078` | searches for a CDS [report number](../glossary.md#report-number) |
+| `aleph:000725622CER` | searches for an Aleph identifier |
+| `cdsrn:CERN-THESIS-2021-078` | searches for a CDS [report number](../glossary.md#report-number) (`report_number:` also works) |
+| `apprn:CERN-EP-2026-001` | searches for an approval report number |
+| `identifier:CERN-THESIS-2021-078` | searches all identifiers of a record |
+| `inspire:1296353` | searches for a related INSPIRE record (`inis:`, `indico:`, `edms:`, `hal:` and `archive:` work the same way) |
 | `experiment:ATLAS` | searches for an experiment |
+| `accelerator:LHC` | searches for an accelerator |
+| `beam:H8` | searches for a beam |
 | `department:EP` | searches for a department |
+| `programme:"Doctoral Student"` | searches for a programme |
+| `committee:SPSC` | searches for a committee |
+| `project:HL-LHC` | searches for a project |
+| `study:FCC` | searches for a study |
+| `facility:HiRadMat` | searches for a facility |
+| `meeting:"LEMON weekly meeting"` | searches for a meeting by its title |
 
-When you search for a DOI, put the DOI value in double quotes.
+Most field names also work in the plural, for example `experiments:ATLAS`. For experiments, accelerators, beams, departments, programmes and committees, add `.id` to search by the identifier instead of the name, for example `experiment.id:atlas`.
+
+!!! tip "Missing a search shortcut?"
+    If you often search for a kind of information that has no field name in this list, or a search does not find a record you expect, [open a request with CDS Support](https://cern.service-now.com/service-portal?id=service_element&name=CDS-Service). Include the search you typed, a link to the record you expected to find, and where the information appears in that record.
 
 ### Combine different query types
 
@@ -154,7 +176,7 @@ Examples:
 - `title:(open science)`
 - `+title:"open science" -description:policy`
 
-Use parentheses when you want to keep terms together inside the same field.
+Use parentheses when you want every word to match inside the same field.
 
 <figure markdown>
 ![Search results for a combined query](images/combined-query-results.png)
@@ -184,15 +206,6 @@ Rules to remember:
 - Curly brackets `{}` mean the start or end value is not included in the range.
 - Mixed brackets such as `[}` let you include the start value and exclude the end value.
 - You can use `*` for an open-ended range.
-
-### Search for missing values
-
-You can search for records that have, or do not have, a value in a field.
-
-Examples:
-
-- `_exists_:metadata.creators`
-- `NOT _exists_:metadata.additional_titles`
 
 ### Other supported advanced syntax
 
